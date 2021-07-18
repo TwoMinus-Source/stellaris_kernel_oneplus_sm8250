@@ -1027,23 +1027,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
 		}
 
 		ret = gi2c->err;
-#ifdef OPLUS_FEATURE_CHG_BASIC
-		if (msgs[i].addr == FG_DEVICE_ADDR || msgs[i].addr == DA9313_DEVICE_ADDR) {
-			if (gi2c->err) {
-				dev_err(gi2c->dev, "gi2c->adap.nr[%d], err_count[%d], msgs[i].addr[0x%x]\n", gi2c->adap.nr, err_count, msgs[i].addr);
-				if (err_count > MIN_RESET_COUNT && err_count < MAX_RESET_COUNT) {
-					i2c_oplus_gpio_reset(gi2c);
-				} else {
-					dev_err(gi2c->dev, "err_count(%d) >= %d so not reset\n", err_count, MAX_RESET_COUNT);
-				}
-				err_count++;
-			} else  {
-				if (msgs[i].addr == FG_DEVICE_ADDR) {
-					err_count = 0;
-				}
-			}
-		}
-#endif
+		gi2c->err = 0;
 		if (gi2c->err) {
 			GENI_SE_ERR(gi2c->ipcl, true, gi2c->dev,
 				"i2c error :%d\n", gi2c->err);
