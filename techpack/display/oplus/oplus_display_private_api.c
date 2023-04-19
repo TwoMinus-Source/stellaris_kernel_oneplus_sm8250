@@ -47,7 +47,7 @@ extern int lcd_closebl_flag;
 int lcd_closebl_flag_fp = 0;
 int iris_recovery_check_state = -1;
 
-int backlight_smooth_enable = 1;
+int backlight_smooth_enable = 0;
 
 extern int oplus_underbrightness_alpha;
 int oplus_dimlayer_fingerprint_failcount = 0;
@@ -170,16 +170,7 @@ bool is_dsi_panel(struct drm_crtc *crtc)
 }
 
 bool is_support_panel_backlight_smooths(const char *panel_name) {
-	if (panel_name == NULL)
 		return false;
-
-	if (backlight_smooth_enable && ((!strcmp(panel_name, "SOFE03F"))
-				|| (!strcmp(panel_name, "AMS662ZS01"))
-				|| (!strcmp(panel_name, "S6E3HC3")))) {
-		return true;
-	} else {
-		return false;
-	}
 }
 
 bool is_skip_panel_ccd_check(const char *panel_name) {
