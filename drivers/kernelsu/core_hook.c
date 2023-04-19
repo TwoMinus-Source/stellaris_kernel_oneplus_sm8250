@@ -38,14 +38,16 @@ static inline bool is_allow_su()
 	return ksu_is_allow_uid(current_uid().val);
 }
 
-static inline bool is_isolated_uid(uid_t uid) {
-    #define FIRST_ISOLATED_UID 99000
-    #define LAST_ISOLATED_UID 99999
-    #define FIRST_APP_ZYGOTE_ISOLATED_UID 90000
-    #define LAST_APP_ZYGOTE_ISOLATED_UID 98999
-    uid_t appid = uid % 100000;
-    return (appid >= FIRST_ISOLATED_UID && appid <= LAST_ISOLATED_UID)
-                || (appid >= FIRST_APP_ZYGOTE_ISOLATED_UID && appid <= LAST_APP_ZYGOTE_ISOLATED_UID);
+static inline bool is_isolated_uid(uid_t uid)
+{
+	#define FIRST_ISOLATED_UID 99000
+	#define LAST_ISOLATED_UID 99999
+	#define FIRST_APP_ZYGOTE_ISOLATED_UID 90000
+	#define LAST_APP_ZYGOTE_ISOLATED_UID 98999
+	uid_t appid = uid % 100000;
+	return (appid >= FIRST_ISOLATED_UID && appid <= LAST_ISOLATED_UID) ||
+	       (appid >= FIRST_APP_ZYGOTE_ISOLATED_UID &&
+			appid <= LAST_APP_ZYGOTE_ISOLATED_UID);
 }
 
 static struct group_info root_groups = { .usage = ATOMIC_INIT(2) };
@@ -162,13 +164,25 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 		}
 
 		// someone wants to be root manager, just check it!
-		// arg3 should be `/data/data/<manager_package_name>`
+		// arg3 should be `/data/user/<userId>/<manager_package_name>`
 		char param[128];
-		const char *prefix = "/data/data/";
 		if (copy_from_user(param, arg3, sizeof(param))) {
 			pr_err("become_manager: copy param err\n");
 			return 0;
 		}
+
+		// for user 0, it is /data/data
+		// for user 999, it is /data/user/999
+		const char *prefix;
+		char prefixTmp[64];
+		int userId = current_uid().val / 100000;
+		if (userId == 0) {
+			prefix = "/data/data";
+		} else {
+			snprintf(prefixTmp, sizeof(prefixTmp), "/data/user/%d", userId);
+			prefix = prefixTmp;
+		}
+
 
 		if (startswith(param, (char *)prefix) != 0) {
 			pr_debug("become_manager: invalid param: %s\n", param);
@@ -345,7 +359,7 @@ static bool should_umount(struct path* path) {
 	}
 
 	if (path->mnt && path->mnt->mnt_sb && path->mnt->mnt_sb->s_type) {
-		const char* fstype = path->mnt->mnt_sb->s_type->name;
+		const char *fstype = path->mnt->mnt_sb->s_type->name;
 		return strcmp(fstype, "overlay") == 0;
 	}
 	return false;
