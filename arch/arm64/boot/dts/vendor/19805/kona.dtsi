@@ -3724,6 +3724,7 @@
 				compatible = "qcom,msm-cdsprm-rpmsg";
 				qcom,glink-channels = "cdsprmglink-apps-dsp";
 				qcom,intents = <0x20 12>;
+				qcom,qos-cores = <0 1>;
 
 				qcom,cdsp-cdsp-l3-gov {
 					compatible = "qcom,cdsp-l3";
@@ -4023,7 +4024,7 @@
 		qcom,fastrpc-adsp-audio-pdr;
 		qcom,fastrpc-adsp-sensors-pdr;
 		qcom,rpc-latency-us = <235>;
-		qcom,qos-cores = <0 1 2 3>;
+		qcom,qos-cores = <0 1>;
 
 		qcom,msm_fastrpc_compute_cb1 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
