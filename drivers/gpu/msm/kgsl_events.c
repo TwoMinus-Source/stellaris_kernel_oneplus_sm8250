@@ -47,7 +47,6 @@ const char *prio_to_string(enum kgsl_priority prio)
 static void _kgsl_event_worker(struct work_struct *work)
 {
 	struct kgsl_event *event = container_of(work, struct kgsl_event, work);
-	int id = KGSL_CONTEXT_ID(event->context);
 
 	event->func(event->device, event->group, event->priv, event->result);
 
