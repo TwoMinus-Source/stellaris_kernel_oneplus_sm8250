@@ -4,7 +4,7 @@
 #
 
 #
-# Compiler: clang version 17.0.0 (/home/main-builder/pkgsrc/llvm-project 0ffea218934b728b68fee7e4d2d973869f222961)
+# Compiler: Neutron clang version 17.0.0 (https://github.com/llvm/llvm-project.git 9aae408d551083bbbac96ecc512d45c30358e4b9)
 #
 CONFIG_OPLUS_SYSTEM_KERNEL_QCOM=y
 CONFIG_GCC_VERSION=0
@@ -22,8 +22,8 @@ CONFIG_THREAD_INFO_IN_TASK=y
 #
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
-CONFIG_LOCALVERSION="-Stellaris"
-CONFIG_LOCALVERSION_AUTO=y
+CONFIG_LOCALVERSION="-KuroNeko"
+# CONFIG_LOCALVERSION_AUTO is not set
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
 CONFIG_HAVE_KERNEL_LZ4=y
