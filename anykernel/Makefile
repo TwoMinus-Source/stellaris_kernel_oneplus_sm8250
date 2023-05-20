@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2022 LibXZR <i@xzr.moe>. All Rights Reserved.
 
-NAME := KuroNeko-Kernel$(LOCALVERSION).zip
+TIME = $(shell date +"%Y%m%d")
+NAME := KuroNeko-Kernel-$(TIME).zip
 
 always += all
 ALL := $(obj)/all
